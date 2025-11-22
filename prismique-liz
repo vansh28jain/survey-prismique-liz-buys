@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f766e, #0ea5e9, #22c55e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            animation: bgShift 8s infinite alternate;
+        }
+
+        @keyframes bgShift {
+            from { background-position: left; }
+            to { background-position: right; }
+        }
+
+        .btn {
+            transition: .15s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .fade-in {
+            animation: fade .6s ease-in-out;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="box" class="max-w-lg w-full bg-white rounded-3xl shadow-xl p-8 text-center border-t-8 border-emerald-500 fade-in">
+
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-emerald-600 mb-4">
+        Quick 30-Second Survey
+    </h1>
+
+    <p id="subtitle" class="text-gray-600 mb-6 text-lg font-medium">
+        Answer 3 questions to unlock your reward 🔓
+    </p>
+
+    <p id="question" class="text-2xl font-bold text-gray-800 mb-8 fade-in"></p>
+
+    <div id="buttons" class="space-y-4">
+        <button onclick="answer(true)" class="btn w-full py-4 rounded-xl text-xl text-white font-semibold bg-green-600 shadow-lg hover:bg-green-700">Yes</button>
+        <button onclick="answer(false)" class="btn w-full py-4 rounded-xl text-xl text-white font-semibold bg-blue-600 shadow-lg hover:bg-blue-700">No</button>
+    </div>
+
+    <div class="mt-6">
+        <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div id="progress" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <p class="text-sm mt-2 font-semibold text-gray-500">Question <span id="step">1</span> of 3</p>
+    </div>
+
+    <!-- Processing -->
+    <div id="loading" class="hidden mt-6 fade-in">
+        <svg class="animate-spin h-12 w-12 text-emerald-500 mx-auto mb-3" viewBox="0 0 24 24">
+            <circle class="opacity-30" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path fill="currentColor" d="M4 12A8 8 0 0112 4V0C5.37 0 0 5.37 0 12h4z"></path>
+        </svg>
+        <p class="font-semibold text-gray-700 text-lg">Analyzing eligibility...</p>
+    </div>
+
+    <!-- Final Screen -->
+    <div id="final" class="hidden fade-in mt-8">
+        <h2 class="text-3xl font-bold text-emerald-600 mb-2">🎉 Congratulations!</h2>
+        <p class="text-lg text-gray-600 mb-6">You qualify for the special reward!</p>
+
+        <a id="claimBtn"
+           href="#"
+           target="_blank"
+           class="block w-full py-5 text-2xl uppercase rounded-xl text-white font-bold shadow-xl"
+           style="background: linear-gradient(90deg, #16a34a, #059669); box-shadow: 0px 6px 18px rgba(16,185,129,.4);">
+            Claim Reward 🔥
+        </a>
+
+        <p class="text-xs text-gray-400 mt-3">Offer secured — tap to continue.</p>
+    </div>
+
+</div>
+
+<script>
+    const CPA_LINK = "https://sites.google.com/view/prismique-liz-buys/home"; 
+
+    const questions = [
+        "Are you 18 years or older?",
+        "Have you purchased anything online recently?",
+        "Are you interested in receiving a free reward?"
+    ];
+
+    let step = 0;
+
+    function loadQuestion() {
+        document.getElementById("question").innerText = questions[step];
+        document.getElementById("step").innerText = step + 1;
+        document.getElementById("progress").style.width = ((step + 1) / questions.length) * 100 + "%";
+    }
+
+    function answer(choice) {
+        step++;
+        if (step < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById("buttons").classList.add("hidden");
+            document.getElementById("loading").classList.remove("hidden");
+
+            setTimeout(() => {
+                document.getElementById("loading").classList.add("hidden");
+                document.getElementById("final").classList.remove("hidden");
+                document.getElementById("claimBtn").href = CPA_LINK;
+                document.getElementById("subtitle").innerText = "Result Ready ✔";
+                document.getElementById("question").classList.add("hidden");
+            }, 2500);
+        }
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
